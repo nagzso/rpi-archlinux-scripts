@@ -1,5 +1,6 @@
 #!/bin/bash
 
+XLAN="${1}";
 XSERVICE_DIR='/etc/systemd/system/fail2ban.service.d';
 
 pacman -S --needed --noconfirm fail2ban;
@@ -17,16 +18,16 @@ before = paths-arch.conf
 
 [DEFAULT]
 ignorself = true
-ignoreip = 127.0.0.1/8 ::1
-bantime  = 12h
+ignoreip  = 127.0.0.1/8 ::1 ${XLAN}
+bantime   = 12h
 findtime  = 10m
-maxretry = 5
+maxretry  = 5
 
 [sshd]
 enabled  = true
 filter   = sshd
 action   = iptables[name=SSH, port=ssh, protocol=tcp]
-           sendmail-whois[name=SSH, dest=your@mail.org, sender=fail2ban@mail.com]
+           sendmail-whois[name=SSH, dest=root, sender=fail2ban]
 backend  = systemd
 maxretry = 5
 findtime = 1d
