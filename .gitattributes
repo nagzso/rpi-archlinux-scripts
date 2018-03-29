@@ -1,0 +1,6 @@
+* text=auto
+
+.gitattributes text eol=crlf
+.gitignore text eol=crlf
+
+*.sh text eol=lf
