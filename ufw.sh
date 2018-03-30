@@ -4,6 +4,8 @@ XLAN="${1}";
 
 pacman -S --needed --noconfirm ufw;
 
+modprobe ip_tables;
+
 ufw default deny incoming;
 ufw default allow outgoing;
 ufw allow from "${XLAN}";
