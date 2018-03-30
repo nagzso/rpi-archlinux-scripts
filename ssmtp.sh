@@ -1,12 +1,17 @@
 #!/bin/bash
 
+# Configured to work with gmail account
+# Google application password can be requested at: https://myaccount.google.com/apppasswords
+#
+# ./ssmtp.sh 'your@email.com' 'the_app_password' 'localhost'
+
 XMAIL_ACCOUNT="${1}"
 XAPP_PASSWORD="${2}"
 XHOSTNAME="${3}"
 XSSMTP_CONF_FILE='/etc/ssmtp/ssmtp.conf';
 
 function install() {
-  pacman -Sy --needed --noconfirm ssmtp;
+  pacman -Syu --needed --noconfirm ssmtp;
 }
 
 function configure() {
