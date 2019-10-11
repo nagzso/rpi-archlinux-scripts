@@ -20,6 +20,9 @@ XSYSADMIN="${8}";
 XSYSADMIN_PASSWORD="${9}";
 
 function initPacman() {
+  pacman-key --init;
+  pacman-key --populate archlinuxarm;
+
   local XPACMAN_CONF_FILE='/etc/pacman.conf';
 
   if [ -e "${XPACMAN_CONF_FILE}.bak" ]; then
