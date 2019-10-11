@@ -1,5 +1,7 @@
 #!/bin/bash
 
+## XLAN value e.g.: 192.168.0.0/24
+
 XLAN="${1}";
 
 pacman -S --needed --noconfirm ufw;
@@ -10,6 +12,7 @@ ufw default deny incoming;
 ufw default allow outgoing;
 ufw allow from "${XLAN}";
 ufw limit SSH;
+ufw logging off;
 
 yes | ufw enable;
 
