@@ -7,7 +7,7 @@
 # mkpasswd is accessible in the whois package (sudo apt-get install whois)
 # If you want to hardcode your password without encryption, then use: echo "username:password" | chpasswd;
 #
-# ./init_pi.sh 'the_encrypted_password_of_root' 'en_US.UTF-8 UTF-8' 'en_US.UTF-8' 'Europe/Budapest' 'homeServer-RPI3' 'Hungary' 'hu' 'sysadmin' 'the_encrypted_password_of_sysadmin'
+# ./init_pi.sh 'the_encrypted_password_of_root' 'en_US.UTF-8 UTF-8' 'en_US.UTF-8' 'Europe/Budapest' 'homeServer-RPI' 'Hungary' 'hu' 'sysadmin' 'the_encrypted_password_of_sysadmin'
 
 XPASSWORD="${1}";
 XLOCALE_LANGUAGE_GEN="${2}";

@@ -1,7 +1,8 @@
 #!/bin/bash
 
 function install() {
-  pacman -Sy --needed --noconfirm mesa;
+  pacman -Syu --noconfirm;
+  pacman -S --needed --noconfirm mesa;
   pacman -S --needed --noconfirm ffmpeg;
   pacman -S --needed --noconfirm mpg123;
   pacman -S --needed --noconfirm lame;
