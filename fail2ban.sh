@@ -19,6 +19,7 @@ PrivateTmp=yes
 ProtectHome=read-only
 ProtectSystem=strict
 NoNewPrivileges=yes
+ReadWritePaths=-/run/ufw.lock
 ReadWritePaths=-/var/run/fail2ban
 ReadWritePaths=-/var/lib/fail2ban
 ReadWritePaths=-${XLOG_DIR}
