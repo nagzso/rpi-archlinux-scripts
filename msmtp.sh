@@ -10,8 +10,7 @@ XAPP_PASSWORD="${2}"
 XFROM_NAME="${3}"
 
 function install() {
-  pacman -Syu --noconfirm;
-  pacman -S --needed --noconfirm msmtp;
+  pacman -Syu --needed --noconfirm msmtp;
   pacman -S --needed --noconfirm msmtp-mta;
 }
 
@@ -40,7 +39,20 @@ account default : gmail
 EOF
 }
 
+function createAliases() {
+  local XALIASES_PATH='/etc/aliases';
+
+  cat << EOF > "${XALIASES_PATH}";
+# Send root to
+root: ${XMAIL_ACCOUNT}
+   
+# Send everything else to
+default: ${XMAIL_ACCOUNT}
+EOF
+}
+
 install;
 configure;
+createAliases;
 
 (return 0 2>/dev/null) && return 0 || exit 0;

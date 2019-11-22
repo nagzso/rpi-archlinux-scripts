@@ -3,18 +3,30 @@
 XDEFAULT_EDITOR="${1}"
 XSUDOERS_DIR='/etc/sudoers.d';
 
-pacman -Syu --noconfirm;
-pacman -S --needed --noconfirm sudo;
+function install() {
+  pacman -Syu --needed --noconfirm sudo;
+}
 
-[ -z "${XDEFAULT_EDITOR}" ] && exit 0;
+function configureDefaultEditor {
+  local XEDITOR_PATH="${XSUDOERS_DIR}/editor";
 
-/usr/bin/${XDEFAULT_EDITOR} --version &>/dev/null;
+  [ -z "${XDEFAULT_EDITOR}" ] && exit 0;
 
-[ ${?} -ne 0 ] && echo 'Warning: Default editor does not exists.' && exit 0;
+  /usr/bin/${XDEFAULT_EDITOR} --version &>/dev/null;
 
-echo "Defaults editor=/usr/bin/${XDEFAULT_EDITOR}, !env_editor" > "${XSUDOERS_DIR}/editor";
+  [ ${?} -ne 0 ] && echo 'Warning: Default editor does not exists.' && exit 0;
 
-chown -R root:root "${XSUDOERS_DIR}";
-chmod -R 0440 ${XSUDOERS_DIR}/*;
+  echo "Defaults editor=/usr/bin/${XDEFAULT_EDITOR}, !env_editor" > "${XEDITOR_PATH}";
 
-exit 0;
+  chown -R root:root "${XEDITOR_PATH}";
+}
+
+function configure() {
+  chmod -R 0440 ${XSUDOERS_DIR}/*;
+}
+
+install;
+configureDefaultEditor;
+configure;
+
+(return 0 2>/dev/null) && return 0 || exit 0;

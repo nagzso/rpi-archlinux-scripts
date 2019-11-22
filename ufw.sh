@@ -4,19 +4,32 @@
 
 XLAN="${1}";
 
-pacman -S --needed --noconfirm ufw;
+function install() {
+  pacman -Syu --needed --noconfirm ufw;
 
-modprobe ip_tables;
+  modprobe ip_tables;
+}
 
-ufw default deny incoming;
-ufw default allow outgoing;
-ufw allow from "${XLAN}";
-ufw limit SSH;
-ufw logging off;
+function configure() {
+  ufw default deny incoming;
+  ufw default allow outgoing;
+  ufw allow from "${XLAN}";
+  ufw limit SSH;
+  ufw logging off;
+}
 
-yes | ufw enable;
+function enable() {
+  systemctl stop iptables ip6tables;
+  systemctl disable iptables ip6tables;
 
-systemctl enable ufw.service;
-systemctl restart ufw.service;
+  yes | ufw enable;
 
-exit 0;
+  systemctl enable ufw.service;
+  systemctl restart ufw.service;
+}
+
+install;
+configure;
+enable;
+
+(return 0 2>/dev/null) && return 0 || exit 0;
