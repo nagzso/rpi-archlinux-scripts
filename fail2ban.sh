@@ -4,13 +4,16 @@
 
 XLAN="${1}";
 XSENDER="${2}";
+XDIR='/etc/fail2ban'
 XSERVICE_DIR='/etc/systemd/system/fail2ban.service.d';
 XLOG_DIR='/var/log/fail2ban';
+XUFW_LOCK='/run/ufw.lock';
 
 pacman -Syu --needed --noconfirm fail2ban;
 
 mkdir -p "${XSERVICE_DIR}";
 mkdir -p "${XLOG_DIR}";
+touch "${XUFW_LOCK}";
 
 cat > "${XSERVICE_DIR}/override.conf" << EOF
 [Service]
@@ -19,7 +22,8 @@ PrivateTmp=yes
 ProtectHome=read-only
 ProtectSystem=strict
 NoNewPrivileges=yes
-ReadWritePaths=-/run/ufw.lock
+ReadWritePaths=-/etc/ufw
+ReadWritePaths=-${XUFW_LOCK}
 ReadWritePaths=-/var/run/fail2ban
 ReadWritePaths=-/var/lib/fail2ban
 ReadWritePaths=-${XLOG_DIR}
@@ -27,7 +31,7 @@ ReadWritePaths=-/var/spool/postfix/maildrop
 CapabilityBoundingSet=CAP_AUDIT_READ CAP_DAC_READ_SEARCH CAP_NET_ADMIN CAP_NET_RAW
 EOF
 
-cat > "/etc/fail2ban/jail.local" << EOF
+cat > "${XDIR}/jail.local" << EOF
 [INCLUDES]
 before = paths-arch.conf
 
@@ -51,7 +55,7 @@ findtime  = 1d
 bantime   = 2w
 EOF
 
-cat > "/etc/fail2ban/fail2ban.local" << EOF
+cat > "${XDIR}/fail2ban.local" << EOF
 [Definition]
 logtarget = ${XLOG_DIR}/fail2ban.log
 EOF
