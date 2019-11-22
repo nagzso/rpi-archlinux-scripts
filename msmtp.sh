@@ -43,4 +43,4 @@ EOF
 install;
 configure;
 
-exit 0;
+(return 0 2>/dev/null) && return 0 || exit 0;

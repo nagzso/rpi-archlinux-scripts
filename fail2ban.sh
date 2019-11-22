@@ -74,4 +74,4 @@ systemctl daemon-reload;
 systemctl enable fail2ban.service;
 systemctl restart fail2ban.service;
 
-exit 0;
+(return 0 2>/dev/null) && return 0 || exit 0;
