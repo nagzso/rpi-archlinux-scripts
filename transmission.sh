@@ -4,7 +4,7 @@
 
 XPASSWORD="${1}";
 XGROUP="${2}";
-XWHITELISTED_HOSTS=( ${3} )
+XWHITELISTED_HOSTS="${3}";
 
 function install() {
   pacman -Syu --needed --noconfirm transmission-cli;
