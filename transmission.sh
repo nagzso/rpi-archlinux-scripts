@@ -5,6 +5,9 @@
 XPASSWORD="${1}";
 XGROUP="${2}";
 XWHITELISTED_HOSTS="${3}";
+XWEB_PORT='4752';
+XPORT_RANGE_LOW='58377';
+XPORT_RANGE_HIGH='58387';
 
 function install() {
   pacman -Syu --needed --noconfirm transmission-cli;
@@ -43,9 +46,9 @@ function configure() {
     "peer-id-ttl-hours": 6,
     "peer-limit-global": 1000,
     "peer-limit-per-torrent": 150,
-    "peer-port": 58377,
-    "peer-port-random-high": 58387,
-    "peer-port-random-low": 58377,
+    "peer-port": ${XPORT_RANGE_LOW},
+    "peer-port-random-high": ${XPORT_RANGE_HIGH},
+    "peer-port-random-low": ${XPORT_RANGE_LOW},
     "peer-port-random-on-start": true,
     "peer-socket-tos": "default",
     "pex-enabled": true,
@@ -63,7 +66,7 @@ function configure() {
     "rpc-host-whitelist": "",
     "rpc-host-whitelist-enabled": true,
     "rpc-password": "${XPASSWORD}",
-    "rpc-port": 4752,
+    "rpc-port": ${XWEB_PORT},
     "rpc-url": "/transmission/",
     "rpc-username": "RPI4-Remote",
     "rpc-whitelist": "127.0.0.1,${XWHITELISTED_HOSTS}",
@@ -107,6 +110,23 @@ ExecReload=/bin/kill -s HUP $MAINPID
 [Install]
 WantedBy=multi-user.target
 EOF
+}
+
+function adjustFirewall() {
+  cat > "/etc/ufw/applications.d/transmission" << EOF
+[Transmission-WebClient]
+title=Transmission
+description=Transmission BitTorrent client
+ports=${XWEB_PORT}/tcp
+
+[Transmission-Daemon]
+title=Transmission
+description=Transmission BitTorrent daemon
+ports=${XPORT_RANGE_LOW}:${XPORT_RANGE_HIGH}/tcp|${XPORT_RANGE_LOW}:${XPORT_RANGE_HIGH}/udp
+EOF
+
+  ufw allow Transmission-WebClient;
+  ufw allow Transmission-Daemon;
 }
 
 function grantPermissions() {
