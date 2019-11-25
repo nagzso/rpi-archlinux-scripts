@@ -7,13 +7,11 @@ XSENDER="${2}";
 XDIR='/etc/fail2ban'
 XSERVICE_DIR='/etc/systemd/system/fail2ban.service.d';
 XLOG_DIR='/var/log/fail2ban';
-XUFW_LOCK='/run/ufw.lock';
 
 pacman -Syu --needed --noconfirm fail2ban;
 
 mkdir -p "${XSERVICE_DIR}";
 mkdir -p "${XLOG_DIR}";
-touch "${XUFW_LOCK}";
 
 cat > "${XSERVICE_DIR}/override.conf" << EOF
 [Service]
@@ -23,7 +21,7 @@ ProtectHome=read-only
 ProtectSystem=strict
 NoNewPrivileges=yes
 ReadWritePaths=-/etc/ufw
-ReadWritePaths=-${XUFW_LOCK}
+ReadWritePaths=-/run
 ReadWritePaths=-/var/run/fail2ban
 ReadWritePaths=-/var/lib/fail2ban
 ReadWritePaths=-${XLOG_DIR}
